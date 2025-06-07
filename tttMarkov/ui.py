@@ -22,15 +22,12 @@ class TicTacToeGUI:
         self.reset_button = tk.Button(self.window, text="Reiniciar", font=('Arial', 12), command=self.reset_game)
         self.reset_button.grid(row=4, column=0, columnspan=3, pady=10)
 
-        self.debug_button = tk.Button(self.window, text="Ver matriz Markov", font=('Arial', 10), command=self.ai.print_transition_matrix)
-        self.debug_button.grid(row=5, column=0, columnspan=3, pady=5)
-
 
     def player_move(self, row, col):
+        prev_state = self.game.get_board_state()  # guardar el estado antes de hacer el movimiento
         if self.game.make_move(row, col, 'X'):
+            self.ai.update_model(prev_state, (row, col))  
             self.update_buttons()
-            prev_state = self.game.get_board_state()
-            self.ai.update_model(prev_state, (row, col))
             winner = self.game.check_winner()
             if winner:
                 self.end_game(f"¡Ganó {winner}!")
@@ -40,17 +37,19 @@ class TicTacToeGUI:
                 return
             self.window.after(500, self.ai_move)
 
+
     def ai_move(self):
-        current_state = self.game.get_board_state()
-        available_moves = self.game.get_empty_cells()
+        prev_state = self.game.get_board_state()  
         move = self.ai.get_best_move(self.game)
         self.game.make_move(*move, 'O')
+
         self.update_buttons()
         winner = self.game.check_winner()
         if winner:
             self.end_game(f"¡Ganó {winner}!")
         elif self.game.is_draw():
             self.end_game("¡Empate!")
+
 
     def update_buttons(self):
         for i in range(3):

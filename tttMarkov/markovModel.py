@@ -87,11 +87,3 @@ class MarkovAI:
         self.history = []
         self.save_data()
 
-    def print_transition_matrix(self):
-        print("=== MATRIZ DE TRANSICIÓN DE MARKOV ===")
-        for state, transitions in self.transition_counts.items():
-            print(f"\nEstado: {state}")
-            total = sum(transitions.values())
-            for move, count in transitions.items():
-                prob = count / total
-                print(f"  → Movimiento {move}: {count} veces ({prob:.2f})")
