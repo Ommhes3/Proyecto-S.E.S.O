@@ -4,8 +4,9 @@ from markovModel import MarkovAI
 
 class TicTacToeGUI:
     def __init__(self):
-        self.game = TicTacToe()
-        self.ai = MarkovAI()
+        # inicializar IA y ui
+        self.game = TicTacToe() 
+        self.ai = MarkovAI() 
         self.window = tk.Tk()
         self.window.title("Tic Tac Toe con IA")
         self.buttons = [[None for _ in range(3)] for _ in range(3)]
