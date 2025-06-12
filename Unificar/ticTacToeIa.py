@@ -1,15 +1,13 @@
 from sesoIA import MarkovAI
+import json
+import random
+import copy
+import os
+import tkinter as tk
+from tkinter import messagebox
 
-def check_winner(board, player):
-    for i in range(3):
-        if all(cell == player for cell in board[i]): return True
-        if all(board[j][i] == player for j in range(3)): return True
-    if all(board[i][i] == player for i in range(3)): return True
-    if all(board[i][2 - i] == player for i in range(3)): return True
-    return False
+from utils import check_winner, is_full, PLAYER, AI
 
-def is_full(board):
-    return all(cell != ' ' for row in board for cell in row)
 
 class TicTacToe:
     def __init__(self, root):

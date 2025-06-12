@@ -4,10 +4,11 @@ import copy
 import os
 import tkinter as tk
 from tkinter import messagebox
+from utils import check_winner, is_full, PLAYER, AI
+
 
 PLAYER = 'X'
 AI = 'O'
-
 
 
 class MarkovAI:
