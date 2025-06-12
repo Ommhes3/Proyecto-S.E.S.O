@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
 import copy
+from tttMarkov.markovModel import MarkovAI
+
+
+
 
 PLAYER = 'X'
 AI = 'O'
@@ -90,22 +94,37 @@ class TicTacToe:
             self.ai_turn()
 
     def ai_turn(self):
-        i, j = best_move(copy.deepcopy(self.board))
-        if i is not None:
+        board_state = tuple(cell if cell != ' ' else '_' for row in self.board for cell in row)
+        available = [(i, j) for i in range(3) for j in range(3) if self.board[i][j] == ' ']
+
+        move = self.ai.predict_next_move(board_state, available)
+        if move in available:
+            print("Respuesta encontrada por Markov 🧠")
+        else:
+            move = best_move(copy.deepcopy(self.board))
+            print("Respuesta encontrada por Minimax 🤖")
+        
+        if move:
+            i, j = move
             self.board[i][j] = AI
             self.buttons[i][j].config(text=AI, state='disabled')
+            self.ai.record_player_move(board_state, move)
+
             if check_winner(self.board, AI):
                 messagebox.showinfo("Perdiste", "La IA usó su SESO 😈")
+                self.ai.end_game()
                 self.reset()
             elif is_full(self.board):
                 messagebox.showinfo("Empate", "¡Nadie ganó! 💤")
+                self.ai.end_game()
                 self.reset()
-
     def reset(self):
+        self.ai.end_game()  # guarda el aprendizaje
         self.board = [[' ' for _ in range(3)] for _ in range(3)]
         for i in range(3):
             for j in range(3):
                 self.buttons[i][j].config(text=' ', state='normal')
+
 
 # Lanzar la app
 root = tk.Tk()
